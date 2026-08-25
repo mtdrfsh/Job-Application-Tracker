@@ -18,8 +18,8 @@ public class ApplicationService {
     public Application createApplication(CreateApplicationRequest request) {
 
         Application application = new Application(
-            request.companyName(),
             request.jobTitle(),
+            request.companyName(),
             request.appliedDate(),
             request.jobPostingUrl(),
             request.resumePath(),
