@@ -1,7 +1,10 @@
 package com.mtdrfsh.jobapplicationtracker.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +39,13 @@ public class ApplicationController {
         Application application = applicationService.createApplication(createApplicationRequest);
         ApplicationDto creApplicationDto = applicationMapper.toDto(application);
         return new ResponseEntity<>(creApplicationDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ApplicationDto>> listApplications() {
+        List<Application> applications = applicationService.listApplications();
+        List<ApplicationDto> applicationDtos = applications.stream().map(applicationMapper::toDto).toList();
+        return ResponseEntity.ok(applicationDtos);
     }
     
 }

@@ -1,5 +1,9 @@
 package com.mtdrfsh.jobapplicationtracker.service;
 
+import java.util.List;
+
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.ScrollPosition.Direction;
 import org.springframework.stereotype.Service;
 
 import com.mtdrfsh.jobapplicationtracker.domain.CreateApplicationRequest;
@@ -27,5 +31,9 @@ public class ApplicationService {
         );
         
         return applicationRepository.save(application);
+    }
+
+    public List<Application> listApplications() {
+        return applicationRepository.findAll(Sort.by(Sort.Direction.ASC, "appliedDate"));
     }
 }

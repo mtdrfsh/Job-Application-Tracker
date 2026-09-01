@@ -13,7 +13,6 @@ public record CreateApplicationRequestDto(
     String jobTitle,
     @NotBlank
     String companyName,
-    @NotBlank
     @PastOrPresent(message = ERROR_MESSAGE_APPLIED_DATE_FUTURE)
     LocalDate appliedDate,
     @Nullable
