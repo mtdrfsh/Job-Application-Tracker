@@ -39,7 +39,7 @@ public class ApplicationService {
 
     public Application updateApplication(UUID id, CreateApplicationRequest request) {
         Application application = applicationRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Application not fount"));
+            .orElseThrow(() -> new RuntimeException("Application not found"));
         
         application.setJobTitle(request.jobTitle());
         application.setCompanyName(request.companyName());
