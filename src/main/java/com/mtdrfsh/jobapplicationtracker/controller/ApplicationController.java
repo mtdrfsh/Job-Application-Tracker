@@ -1,11 +1,14 @@
 package com.mtdrfsh.jobapplicationtracker.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,4 +51,14 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationDtos);
     }
     
+    @PutMapping("/{id}")
+    public ResponseEntity<ApplicationDto> updateApplication(
+        @PathVariable UUID id,
+        @Valid @RequestBody CreateApplicationRequestDto createApplicationRequestDto
+    ) {
+        CreateApplicationRequest createApplicationRequest = applicationMapper.fromDto(createApplicationRequestDto);
+        Application application = applicationService.updateApplication(id, createApplicationRequest);
+        ApplicationDto applicationDto = applicationMapper.toDto(application);
+        return ResponseEntity.ok(applicationDto);
+    }
 }

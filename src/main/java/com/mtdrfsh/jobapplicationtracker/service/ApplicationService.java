@@ -1,6 +1,7 @@
 package com.mtdrfsh.jobapplicationtracker.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,19 @@ public class ApplicationService {
 
     public List<Application> listApplications() {
         return applicationRepository.findAll(Sort.by(Sort.Direction.ASC, "appliedDate"));
+    }
+
+    public Application updateApplication(UUID id, CreateApplicationRequest request) {
+        Application application = applicationRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Application not fount"));
+        
+        application.setJobTitle(request.jobTitle());
+        application.setCompanyName(request.companyName());
+        application.setAppliedDate(request.appliedDate());
+        application.setJobPostingUrl(request.jobPostingUrl());
+        application.setResumePath(request.resumePath());
+        application.setNote(request.note());
+
+        return applicationRepository.save(application);
     }
 }
