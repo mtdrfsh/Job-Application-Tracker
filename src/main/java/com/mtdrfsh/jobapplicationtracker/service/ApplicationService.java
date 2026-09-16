@@ -50,4 +50,11 @@ public class ApplicationService {
 
         return applicationRepository.save(application);
     }
+
+    public void deleteApplication(UUID id) {
+        applicationRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        applicationRepository.deleteById(id);
+    }
 }
