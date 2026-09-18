@@ -37,6 +37,11 @@ public class ApplicationService {
         return applicationRepository.findAll(Sort.by(Sort.Direction.ASC, "appliedDate"));
     }
 
+    public Application getApplication(UUID id) {
+        return applicationRepository.findById(id).
+            orElseThrow(() -> new RuntimeException("Application not found"));
+    }
+
     public Application updateApplication(UUID id, CreateApplicationRequest request) {
         Application application = applicationRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Application not found"));
