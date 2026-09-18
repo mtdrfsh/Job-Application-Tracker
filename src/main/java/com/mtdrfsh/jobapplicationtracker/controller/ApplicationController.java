@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mtdrfsh.jobapplicationtracker.domain.CreateApplicationRequest;
+import com.mtdrfsh.jobapplicationtracker.domain.UpdateApplicationStatusRequest;
 import com.mtdrfsh.jobapplicationtracker.domain.dto.ApplicationDto;
 import com.mtdrfsh.jobapplicationtracker.domain.dto.CreateApplicationRequestDto;
 import com.mtdrfsh.jobapplicationtracker.domain.entity.Application;
@@ -68,6 +70,16 @@ public class ApplicationController {
     ) {
         CreateApplicationRequest createApplicationRequest = applicationMapper.fromDto(createApplicationRequestDto);
         Application application = applicationService.updateApplication(id, createApplicationRequest);
+        ApplicationDto applicationDto = applicationMapper.toDto(application);
+        return ResponseEntity.ok(applicationDto);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApplicationDto> updateStatus(
+        @PathVariable UUID id,
+        @Valid @RequestBody UpdateApplicationStatusRequest updateApplicationRequestDto
+    ) {
+        Application application = applicationService.updateStatus(id, updateApplicationRequestDto);
         ApplicationDto applicationDto = applicationMapper.toDto(application);
         return ResponseEntity.ok(applicationDto);
     }
