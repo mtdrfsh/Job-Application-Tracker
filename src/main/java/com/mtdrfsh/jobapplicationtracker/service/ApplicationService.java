@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.mtdrfsh.jobapplicationtracker.domain.CreateApplicationRequest;
+import com.mtdrfsh.jobapplicationtracker.domain.UpdateApplicationStatusRequest;
 import com.mtdrfsh.jobapplicationtracker.domain.entity.Application;
 import com.mtdrfsh.jobapplicationtracker.repository.ApplicationRepository;
 
@@ -52,6 +53,15 @@ public class ApplicationService {
         application.setJobPostingUrl(request.jobPostingUrl());
         application.setResumePath(request.resumePath());
         application.setNote(request.note());
+
+        return applicationRepository.save(application);
+    }
+
+    public Application updateStatus(UUID id, UpdateApplicationStatusRequest request) {
+        Application application = applicationRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Application not found"));
+        
+        application.setStatus(request.status());
 
         return applicationRepository.save(application);
     }
