@@ -51,6 +51,15 @@ public class ApplicationController {
         List<ApplicationDto> applicationDtos = applications.stream().map(applicationMapper::toDto).toList();
         return ResponseEntity.ok(applicationDtos);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApplicationDto> getApplication(
+        @PathVariable UUID id
+    ) {
+        Application application = applicationService.getApplication(id);
+        ApplicationDto applicationDto = applicationMapper.toDto(application);
+        return ResponseEntity.ok(applicationDto);
+    }
     
     @PutMapping("/{id}")
     public ResponseEntity<ApplicationDto> updateApplication(
