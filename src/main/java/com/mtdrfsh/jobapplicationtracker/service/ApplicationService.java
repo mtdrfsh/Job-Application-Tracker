@@ -10,6 +10,7 @@ import com.mtdrfsh.jobapplicationtracker.controller.ApplicationNotFoundException
 import com.mtdrfsh.jobapplicationtracker.domain.CreateApplicationRequest;
 import com.mtdrfsh.jobapplicationtracker.domain.UpdateApplicationStatusRequest;
 import com.mtdrfsh.jobapplicationtracker.domain.entity.Application;
+import com.mtdrfsh.jobapplicationtracker.domain.entity.ApplicationStatus;
 import com.mtdrfsh.jobapplicationtracker.repository.ApplicationRepository;
 
 @Service
@@ -72,5 +73,13 @@ public class ApplicationService {
             .orElseThrow(() -> new ApplicationNotFoundException());
 
         applicationRepository.deleteById(id);
+    }
+
+    public List<Application> filterApplications(ApplicationStatus status) {
+        return applicationRepository.findByStatus(status);
+    }
+
+    public List<Application> searchApplications(String search) {
+        return applicationRepository.findByJobTitleContainingIgnoreCaseOrCompanyNameContainingIgnoreCase(search,search);
     }
 }

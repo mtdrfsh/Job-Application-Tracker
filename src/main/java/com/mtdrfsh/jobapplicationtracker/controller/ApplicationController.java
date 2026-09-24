@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mtdrfsh.jobapplicationtracker.domain.CreateApplicationRequest;
@@ -20,6 +21,7 @@ import com.mtdrfsh.jobapplicationtracker.domain.UpdateApplicationStatusRequest;
 import com.mtdrfsh.jobapplicationtracker.domain.dto.ApplicationDto;
 import com.mtdrfsh.jobapplicationtracker.domain.dto.CreateApplicationRequestDto;
 import com.mtdrfsh.jobapplicationtracker.domain.entity.Application;
+import com.mtdrfsh.jobapplicationtracker.domain.entity.ApplicationStatus;
 import com.mtdrfsh.jobapplicationtracker.mapper.ApplicationMapper;
 import com.mtdrfsh.jobapplicationtracker.service.ApplicationService;
 
@@ -90,5 +92,24 @@ public class ApplicationController {
     ) {
         applicationService.deleteApplication(id);
         return ResponseEntity.noContent().build();
+    }
+
+    // Filtering & Search
+    @GetMapping(params = "status")
+    public ResponseEntity<List<ApplicationDto>> filterApplications(
+        @RequestParam ApplicationStatus status
+    ) {
+        List<Application> applications = applicationService.filterApplications(status);
+        List<ApplicationDto> applicationDtos = applications.stream().map(applicationMapper::toDto).toList();
+        return ResponseEntity.ok(applicationDtos);
+    }
+
+    @GetMapping(params = "search")
+    public ResponseEntity<List<ApplicationDto>> searchApplications(
+        @RequestParam String search
+    ) {
+        List<Application> applications = applicationService.searchApplications(search);
+        List<ApplicationDto> applicationDtos = applications.stream().map(applicationMapper::toDto).toList();
+        return ResponseEntity.ok(applicationDtos);
     }
 }
