@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.mtdrfsh.jobapplicationtracker.controller.ApplicationNotFoundException;
 import com.mtdrfsh.jobapplicationtracker.domain.CreateApplicationRequest;
 import com.mtdrfsh.jobapplicationtracker.domain.UpdateApplicationStatusRequest;
 import com.mtdrfsh.jobapplicationtracker.domain.entity.Application;
@@ -39,13 +40,13 @@ public class ApplicationService {
     }
 
     public Application getApplication(UUID id) {
-        return applicationRepository.findById(id).
-            orElseThrow(() -> new RuntimeException("Application not found"));
+        return applicationRepository.findById(id)
+            .orElseThrow(() -> new ApplicationNotFoundException());
     }
 
     public Application updateApplication(UUID id, CreateApplicationRequest request) {
         Application application = applicationRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Application not found"));
+            .orElseThrow(() -> new ApplicationNotFoundException());
         
         application.setJobTitle(request.jobTitle());
         application.setCompanyName(request.companyName());
@@ -59,7 +60,7 @@ public class ApplicationService {
 
     public Application updateStatus(UUID id, UpdateApplicationStatusRequest request) {
         Application application = applicationRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Application not found"));
+            .orElseThrow(() -> new ApplicationNotFoundException());
         
         application.setStatus(request.status());
 
@@ -68,7 +69,7 @@ public class ApplicationService {
 
     public void deleteApplication(UUID id) {
         applicationRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Application not found"));
+            .orElseThrow(() -> new ApplicationNotFoundException());
 
         applicationRepository.deleteById(id);
     }

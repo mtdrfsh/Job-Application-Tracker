@@ -23,4 +23,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ApplicationNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleApplicationNotFound(ApplicationNotFoundException ex) {
+        ErrorDto errorDto = new ErrorDto(ex.getMessage());
+
+        return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+    }
 }
