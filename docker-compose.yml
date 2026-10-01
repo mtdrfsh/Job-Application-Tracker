@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:17
+    container_name: jobapplicationtracker-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: jobapplicationtracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer:latest
+    restart: always
+    ports:
+      - 8888:8080
+      
+volumes:
+  postgres_data:
