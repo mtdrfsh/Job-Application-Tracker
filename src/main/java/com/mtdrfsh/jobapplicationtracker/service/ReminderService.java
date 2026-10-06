@@ -47,17 +47,15 @@ public class ReminderService {
         return reminderRepository.findByApplicationId(id);
     }
 
-    public Reminder getReminder(UUID reminder_id) {
-        return reminderRepository.findById(reminder_id)
-            .orElseThrow(() -> new ApplicationNotFoundException());
+    public Reminder getReminder(UUID reminder_id, UUID applicationId) {
+        return reminderRepository.findByIdAndApplicationId(reminder_id, applicationId);
     }
 
-    public Reminder updateReminder(UUID id, UUID reminder_id, CreateReminderRequest request) {
-        Application application = applicationRepository.findById(id)
+    public Reminder updateReminder(UUID applicationId, UUID reminder_id, CreateReminderRequest request) {
+        applicationRepository.findById(applicationId)
             .orElseThrow(() -> new ApplicationNotFoundException());
 
-        Reminder reminder = reminderRepository.findById(reminder_id)
-            .orElseThrow(() -> new ApplicationNotFoundException());
+        Reminder reminder = reminderRepository.findByIdAndApplicationId(reminder_id, applicationId);
         
         reminder.setType(request.type());
         reminder.setDueDate(request.dueDate());
@@ -66,36 +64,33 @@ public class ReminderService {
         return reminderRepository.save(reminder);
     }
 
-    public Reminder updateType(UUID id, UUID reminder_id, UpdateReminderStatusRequest request) {
-        Application application = applicationRepository.findById(id)
+    public Reminder updateType(UUID applicationId, UUID reminder_id, UpdateReminderStatusRequest request) {
+        applicationRepository.findById(applicationId)
             .orElseThrow(() -> new ApplicationNotFoundException());
 
-        Reminder reminder = reminderRepository.findById(reminder_id)
-            .orElseThrow(() -> new ApplicationNotFoundException());
+        Reminder reminder = reminderRepository.findByIdAndApplicationId(reminder_id, applicationId);
         
         reminder.setType(request.type());
 
         return reminderRepository.save(reminder);
     }
 
-    public Reminder isCompleted(UUID id, UUID reminder_id) {
-        Application application = applicationRepository.findById(id)
+    public Reminder isCompleted(UUID applicationId, UUID reminder_id) {
+        applicationRepository.findById(applicationId)
             .orElseThrow(() -> new ApplicationNotFoundException());
 
-        Reminder reminder = reminderRepository.findById(reminder_id)
-            .orElseThrow(() -> new ApplicationNotFoundException());
+        Reminder reminder = reminderRepository.findByIdAndApplicationId(reminder_id, applicationId);
         
         reminder.setCompleted(!reminder.getCompleted());
 
         return reminderRepository.save(reminder);
     }
 
-    public void deleteReminder(UUID id, UUID reminder_id) {
-        Application application = applicationRepository.findById(id)
+    public void deleteReminder(UUID applicationId, UUID reminder_id) {
+        applicationRepository.findById(applicationId)
             .orElseThrow(() -> new ApplicationNotFoundException());
 
-        Reminder reminder = reminderRepository.findById(reminder_id)
-            .orElseThrow(() -> new ApplicationNotFoundException());
+        reminderRepository.findByIdAndApplicationId(reminder_id, applicationId);
 
         reminderRepository.deleteById(reminder_id);
     }

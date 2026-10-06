@@ -62,9 +62,10 @@ public class ReminderController {
 
     @GetMapping("/{reminder_id}")
     public ResponseEntity<ReminderDto> getReminder(
+        @PathVariable UUID id,
         @PathVariable UUID reminder_id
     ) {
-        Reminder reminder = reminderService.getReminder(reminder_id);
+        Reminder reminder = reminderService.getReminder(id, reminder_id);
         ReminderDto reminderDto = reminderMapper.toDto(reminder);
         return ResponseEntity.ok(reminderDto);
     }

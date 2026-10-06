@@ -11,4 +11,5 @@ import com.mtdrfsh.jobapplicationtracker.domain.entity.Reminder;
 public interface ReminderRepository extends JpaRepository<Reminder, UUID>{
 
     List<Reminder> findByApplicationId(UUID id);
+    Reminder findByIdAndApplicationId(UUID id, UUID application_id);
 }
