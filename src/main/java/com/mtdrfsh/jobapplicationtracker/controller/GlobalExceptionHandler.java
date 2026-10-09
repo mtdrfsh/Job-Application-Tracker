@@ -29,4 +29,11 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ReminderNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleReminderNotFound(
+        ReminderNotFoundException ex) {
+    ErrorDto errorDto = new ErrorDto(ex.getMessage());
+    return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+}
 }

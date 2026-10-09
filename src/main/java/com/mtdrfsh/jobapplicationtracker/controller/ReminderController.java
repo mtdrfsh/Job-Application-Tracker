@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mtdrfsh.jobapplicationtracker.domain.CreateReminderRequest;
 import com.mtdrfsh.jobapplicationtracker.domain.UpdateApplicationStatusRequest;
-import com.mtdrfsh.jobapplicationtracker.domain.UpdateReminderStatusRequest;
+import com.mtdrfsh.jobapplicationtracker.domain.UpdateReminderIsCompletedRequest;
+import com.mtdrfsh.jobapplicationtracker.domain.UpdateReminderTypeRequest;
 import com.mtdrfsh.jobapplicationtracker.domain.dto.ApplicationDto;
 import com.mtdrfsh.jobapplicationtracker.domain.dto.CreateReminderRequestDto;
 import com.mtdrfsh.jobapplicationtracker.domain.dto.ReminderDto;
@@ -44,7 +45,7 @@ public class ReminderController {
     public ResponseEntity<ReminderDto> createReminder(
         @PathVariable UUID id,
         @Valid @RequestBody CreateReminderRequestDto createReminderRequestDto
-    ) {
+        ) {
         CreateReminderRequest createReminderRequest = reminderMapper.fromDto(createReminderRequestDto);
         Reminder reminder = reminderService.createReminder(id,createReminderRequest);
         ReminderDto reminderDto = reminderMapper.toDto(reminder); 
@@ -54,7 +55,7 @@ public class ReminderController {
     @GetMapping
     public ResponseEntity<List<ReminderDto>> listReminders(
         @PathVariable UUID id
-    ) {
+        ) {
         List<Reminder> reminders = reminderService.listReminders(id);
         List<ReminderDto> reminderDto = reminders.stream().map(reminderMapper::toDto).toList();
         return ResponseEntity.ok(reminderDto);
@@ -64,8 +65,8 @@ public class ReminderController {
     public ResponseEntity<ReminderDto> getReminder(
         @PathVariable UUID id,
         @PathVariable UUID reminder_id
-    ) {
-        Reminder reminder = reminderService.getReminder(id, reminder_id);
+        ) {
+        Reminder reminder = reminderService.getReminder(reminder_id, id);
         ReminderDto reminderDto = reminderMapper.toDto(reminder);
         return ResponseEntity.ok(reminderDto);
     }
@@ -75,20 +76,20 @@ public class ReminderController {
         @PathVariable UUID id,
         @PathVariable UUID reminder_id,
         @Valid @RequestBody CreateReminderRequestDto createReminderRequestDto
-    ) {
+        ) {
         CreateReminderRequest createReminderRequest = reminderMapper.fromDto(createReminderRequestDto);
         Reminder reminder = reminderService.updateReminder(id,reminder_id,createReminderRequest);
         ReminderDto reminderDto = reminderMapper.toDto(reminder);
         return ResponseEntity.ok(reminderDto);
     }
 
-    @PatchMapping("/{reminder_id}/status")
+    @PatchMapping("/{reminder_id}/type")
     public ResponseEntity<ReminderDto> updateType(
         @PathVariable UUID id,
         @PathVariable UUID reminder_id,
-        @Valid @RequestBody UpdateReminderStatusRequest updateReminderStatusRequest
-    ) {
-        Reminder reminder = reminderService.updateType(id, reminder_id, updateReminderStatusRequest);
+        @Valid @RequestBody UpdateReminderTypeRequest updateReminderTypeRequest
+        ) {
+        Reminder reminder = reminderService.updateReminderType(id, reminder_id, updateReminderTypeRequest);
         ReminderDto reminderDto = reminderMapper.toDto(reminder);
         return ResponseEntity.ok(reminderDto);
     }
@@ -96,9 +97,10 @@ public class ReminderController {
     @PatchMapping("/{reminder_id}")
     public ResponseEntity<ReminderDto> isCompleted(
         @PathVariable UUID id,
-        @PathVariable UUID reminder_id
-    ) {
-        Reminder reminder = reminderService.isCompleted(id, reminder_id);
+        @PathVariable UUID reminder_id,
+        @Valid @RequestBody UpdateReminderIsCompletedRequest updateReminderIsCompletedRequest
+        ) {
+        Reminder reminder = reminderService.isCompleted(id, reminder_id, updateReminderIsCompletedRequest);
         ReminderDto reminderDto = reminderMapper.toDto(reminder);
         return ResponseEntity.ok(reminderDto);
     }
@@ -107,7 +109,7 @@ public class ReminderController {
     public ResponseEntity<Void> deleteReminder(
         @PathVariable UUID id,
         @PathVariable UUID reminder_id
-    ) {
+        ) {
         reminderService.deleteReminder(id, reminder_id);
         return ResponseEntity.noContent().build();
     }
